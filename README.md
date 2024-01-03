@@ -1,16 +1,14 @@
-# testing
+# Testing App
 
-A new Flutter project.
+A Test app to replicate the problem im having with AwesomeNotifications
 
-## Getting Started
+## Steps to reproduce problem
 
-This project is a starting point for a Flutter application.
+1. Start App
+2. Click Button right button
+3. Deny Permission when prompted
+4. Click Button in bottom right again
+5. When sent to Settings don't do anything and return to app
+- App is now still awaiting AwesomeNotifications().requestPermissionToSendNotifications() to return.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+(You can also try turning the permission on and off, but this may cause a black screen when returning as mentioned [Here](https://github.com/rafaelsetragni/awesome_notifications/issues/842) )

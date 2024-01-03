@@ -55,15 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void notificationExample({bool isStarting = false}) async{
     setState(() { statusString = "Loading..."; isLoading = true; });
 
-    //Show a popup to know that it reached the AwesomeNotifications call
-    await showDialog(
+    //Show a popup to indicate that it reached the AwesomeNotifications permission request
+    //Uncomment to use as a debugging method when debugger is disconnected
+    /*await showDialog(
       context: navigatorKey.currentContext!,
       builder: (context) => AlertDialog(
         title: const Text("Before"),
         actions: [TextButton(
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(), // dismisses only the dialog and returns nothing
             child: const Text('OK')
-          )]));
+          )]));*/
 
     //Checking if the permission is allowed, if not then ensure that app isn't just starting, then requestPermission.
     if (!await AwesomeNotifications().isNotificationAllowed() && (isStarting || !await AwesomeNotifications().requestPermissionToSendNotifications())) {
@@ -72,20 +73,22 @@ class _MyHomePageState extends State<MyHomePage> {
         return; //Important Return
     }
 
-    //Show a popup to know that it passed the AwesomeNotifications call
-    await showDialog(
+    //Show a popup to indicate that it has passed the AwesomeNotifications permission request
+    //Uncomment to use as a debugging method when debugger is disconnected
+    /*await showDialog(
       context: navigatorKey.currentContext!,
       builder: (context) => AlertDialog(
         title: const Text("After"),
         actions: [TextButton(
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(), // dismisses only the dialog and returns nothing
             child: const Text('OK')
-          )]));
+          )]));*/
     
     setState(() { statusString = "Notification Loaded Successfully!"; isLoading = false; });
 
-    Random random = Random();
 
+    //Show notification
+    Random random = Random();
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: random.nextInt(1000) + 1,
