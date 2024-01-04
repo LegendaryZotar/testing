@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
-  AwesomeNotifications().initialize(null, [NotificationChannel(channelKey: "testing_channel", channelName: "Testing Channel", channelDescription: "Testing Channel Description")], debug: true);
   WidgetsFlutterBinding.ensureInitialized;
+  AwesomeNotifications().initialize(null, [NotificationChannel(channelKey: "testing_channel", channelName: "Testing Channel", channelDescription: "Testing Channel Description")], debug: true);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) { return MaterialApp(home: const MyHomePage(), navigatorKey: navigatorKey,);}
+  Widget build(BuildContext context) { return MaterialApp(home: const MyHomePage(), navigatorKey: navigatorKey,); }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -52,6 +52,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void Test() {
+    AwesomeNotifications().requestPermissionToSendNotifications().then((value) {
+      showDialog(
+      context: navigatorKey.currentContext!,
+      builder: (context) => AlertDialog(
+        title: const Text("Value is"),
+        actions: [TextButton(
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(), // dismisses only the dialog and returns nothing
+            child: Text(value.toString())
+          )]));
+    }); 
+  }
+
   void notificationExample({bool isStarting = false}) async{
     setState(() { statusString = "Loading..."; isLoading = true; });
 
@@ -67,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )]));*/
 
     //Checking if the permission is allowed, if not then ensure that app isn't just starting, then requestPermission.
-    if (!await AwesomeNotifications().isNotificationAllowed() && (isStarting || !await AwesomeNotifications().requestPermissionToSendNotifications())) {
+    if (!await AwesomeNotifications().isNotificationAllowed() && (isStarting || !await AwesomeNotifications().requestPermissionToSendNotifications().then((value) { print('\x1B[31mReturned!\x1B[0m'); return value;}))) {
         //If permission denied set status to denied.
         setState(() { statusString = "Permission Denied, Click the bell to enable Notifications"; isLoading = false; });
         return; //Important Return
@@ -92,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: random.nextInt(1000) + 1,
-        channelKey: "testing_channel",
+        channelKey: "alerts", //testing_channel
         title: "Test Notification",
         body: "This is a test description."
         )
